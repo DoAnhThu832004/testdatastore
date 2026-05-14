@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">roadMapAperoLesson3Exercise</string>
+    <string name="data_store">Data Store</string>
+    <string name="dark_mode_and_language">Dark Mode &amp; Language</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="language">Language</string>
+</resources>
