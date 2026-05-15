@@ -5,6 +5,7 @@ import androidx.compose.ui.res.booleanResource
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.roadmapaperolesson3exercise.extensions.catchIOException
@@ -24,6 +25,8 @@ class SettingManager @Inject constructor(
         private val USERNAME = stringPreferencesKey("username")
         private val TICK = booleanPreferencesKey("tick")
         private val COUNT = intPreferencesKey("count")
+        private val ACCESS_TOKEN = stringPreferencesKey("access_token")
+        private val EXPIRATION_TIME = longPreferencesKey("expiration_time")
     }
 
     val darkModeFlow = context.dataStore.data
@@ -41,7 +44,12 @@ class SettingManager @Inject constructor(
     val countFlow = context.dataStore.data
         .catchIOException()
         .map { it[COUNT] ?: 0 }
-
+    val accessTokenFlow = context.dataStore.data
+        .catchIOException()
+        .map { it[ACCESS_TOKEN] ?: "" }
+    val expirationTimeFlow = context.dataStore.data
+        .catchIOException()
+        .map { it[EXPIRATION_TIME] ?: 0 }
     suspend fun setDarkMode(darkMode: Boolean) : Result<Unit> {
         return try {
             context.dataStore.edit {
@@ -89,6 +97,31 @@ class SettingManager @Inject constructor(
             }
             Result.success(Unit)
         } catch (e: IOException) {
+            Result.failure(e)
+        }
+    }
+    suspend fun saveSession(accessToken: String, expirationTime: Long): Result<Unit> {
+        return try {
+            context.dataStore.edit {
+                it[ACCESS_TOKEN] = accessToken
+                it[EXPIRATION_TIME] = expirationTime
+            }
+            Result.success(Unit)
+        } catch (e: IOException) {
+            Result.failure(e)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    suspend fun cleanSession(): Result<Unit> {
+        return try {
+            context.dataStore.edit {
+                it.clear()
+            }
+            Result.success(Unit)
+        } catch (e: IOException) {
+            Result.failure(e)
+        } catch (e: Exception) {
             Result.failure(e)
         }
     }

@@ -26,7 +26,7 @@ class DataStoreViewModel @Inject constructor(
         settingManager.usernameFlow,
         settingManager.tickFlow,
         settingManager.countFlow
-    ) { isDark, lang, username,tick,count ->
+    ) { isDark, lang, username ,tick ,count ->
         // Bọc dữ liệu (ruột) vào trong Resource.Success (vỏ)
         Resource.Success(
             DataStoreStateUI(
@@ -104,6 +104,6 @@ class DataStoreViewModel @Inject constructor(
         val language: String = "en",
         val username: String? = "",
         val tick: Boolean = false,
-        val count: Int = 0
+        val count: Int = 0,
     )
 }
